@@ -1,0 +1,13 @@
+{
+  "name": "zx-scripts",
+  "version": "1.0.0",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.10",
+    "dotenv": "^10.0.0",
+    "zx": "^2.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.3.5"
+  }
+}
