@@ -26,7 +26,7 @@ files.forEach((file) => {
       const data = await $`
         pyftsubset ${file} \
         --output-file=${outputFile} \
-        --flavor=${flavors[0]} \
+        --flavor=${flavor} \
         --layout-features=${layoutFeatures} \
         --unicodes=${unicodes}
       `;
