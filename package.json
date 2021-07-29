@@ -2,6 +2,9 @@
   "name": "zx-scripts",
   "version": "1.0.0",
   "license": "MIT",
+  "scripts": {
+    "clean": "rm -r ./output"
+  },
   "dependencies": {
     "cheerio": "^1.0.0-rc.10",
     "dotenv": "^10.0.0",
