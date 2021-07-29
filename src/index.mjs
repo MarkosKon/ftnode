@@ -1,17 +1,28 @@
 #!/usr/bin/env zx
 
 import path from "path";
+import ProgressBar from "progress";
 
 import { parseMinimistArgs } from "./parseMinimistArgs.mjs";
-import { printError } from "./printError.mjs";
+import {
+  ApplicationError,
+  PyftSubsetError,
+  printApplicationError,
+  printPyftSubsetError,
+  printError,
+} from "./errors.mjs";
 import { toPOSIXPath } from "./toPOSIXPath.mjs";
 
-// $.verbose = false;
+$.verbose = false;
 
 const { files, outputDirectory, flavors, layoutFeatures, unicodes } =
   parseMinimistArgs(argv);
 
-console.log({ files, outputDirectory, flavors, layoutFeatures, unicodes });
+const bar = new ProgressBar(":bar :current/:total", {
+  total: files.length * flavors.length,
+});
+
+// console.log({ files, outputDirectory, flavors, layoutFeatures, unicodes });
 
 files.forEach((file) => {
   flavors.forEach(async (flavor) => {
@@ -30,8 +41,15 @@ files.forEach((file) => {
         --layout-features=${layoutFeatures} \
         --unicodes=${unicodes}
       `;
+
+      console.log(data.stdout);
+      if (data.stderr) throw new PyftSubsetError(data.stderr);
     } catch (error) {
-      printError(error);
+      if (error instanceof ApplicationError) printApplicationError(error);
+      else if (error instanceof PyftSubsetError) printPyftSubsetError(error);
+      else printError(error);
+    } finally {
+      bar.tick();
     }
   });
 });

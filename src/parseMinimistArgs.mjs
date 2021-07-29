@@ -2,7 +2,7 @@ import path from "path";
 import fs from "fs";
 
 import { ALL } from "./globals.mjs";
-import { printError } from "./printError.mjs";
+import { ApplicationError, printApplicationError } from "./errors.mjs";
 
 const defaultOptions = {
   OUTPUT_DIRECTORY: path.resolve(process.cwd(), "output"),
@@ -39,10 +39,11 @@ const parseMinimistArgs = (argv) => {
   const files = argv._.slice(1);
 
   try {
-    // if (files.length > 1) throw new Error("I want at max one file for now.");
-    if (files.length === 0) throw new Error("Please provide a file argument.");
+    if (files.length === 0)
+      throw new ApplicationError("Please provide a file argument.");
   } catch (error) {
-    printError(error);
+    if (error instanceof ApplicationError) printApplicationError(error);
+    else printError(error);
     process.exit(1);
   }
 
