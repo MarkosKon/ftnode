@@ -40,14 +40,26 @@ const parseMinimistArgs = (argv) => {
 
   try {
     if (files.length === 0)
-      throw new ApplicationError("Please provide a file argument.");
+      throw new ApplicationError("Please provide a file argument.\n");
   } catch (error) {
     if (error instanceof ApplicationError) printApplicationError(error);
     else printError(error);
     process.exit(1);
   }
 
-  const { outputDirectory, flavors, layoutFeatures, unicodes } = argv;
+  const { outputDirectory, flavors, layoutFeatures, unicodes, ...rest } = argv;
+
+  console.log({ rest });
+
+  const parsedFiles = files.map((file) => {
+    if (process.platform === "win32" && /^\/[a-z]\//.test(file)) {
+      return file.replace(/\/([a-z])\//, (match, offset, string) => {
+        const result = `${offset.toUpperCase()}:/`;
+        console.log({ match, offset, string, result });
+        return result;
+      });
+    } else return file;
+  });
 
   const parsedOutputDirectory = outputDirectory
     ? path.resolve(process.cwd(), outputDirectory)
@@ -68,12 +80,24 @@ const parseMinimistArgs = (argv) => {
     ? minimistStringToArray(unicodes)
     : defaultOptions.pyftsubset.UNICODES;
 
+  const parsedAxisLoc = Object.entries(rest)
+    .filter(
+      ([key, value]) =>
+        key.length === 4 &&
+        ![true, false, undefined, null, ""].includes(value) &&
+        /^((drop)|([0-9]+)|([0-9]+\:[0-9]+))$/.test(value)
+    )
+    .map(([key, value]) => ({
+      [key]: value,
+    }));
+
   return {
-    files,
+    files: parsedFiles,
     outputDirectory: parsedOutputDirectory,
     flavors: parsedFlavors,
     layoutFeatures: parsedLayoutFeatures,
     unicodes: parsedUnicodes,
+    axisLoc: parsedAxisLoc,
   };
 };
 
