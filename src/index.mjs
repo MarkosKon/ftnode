@@ -18,7 +18,7 @@ import { toPOSIXPath } from "./toPOSIXPath.mjs";
 const {
   files,
   verbose,
-  noReplaceName,
+  replaceName,
   outputDirectory,
   flavors,
   layoutFeatures,
@@ -41,17 +41,19 @@ const pyftsubsetBar = new ProgressBar(
   }
 );
 
-console.log({
-  files,
-  verbose,
-  noReplaceName,
-  outputDirectory,
-  flavors,
-  layoutFeatures,
-  unicodes,
-  axisLoc,
-});
+if (verbose)
+  console.log({
+    files,
+    verbose,
+    replaceName,
+    outputDirectory,
+    flavors,
+    layoutFeatures,
+    unicodes,
+    axisLoc,
+  });
 
+let varLibInstancerPromises = [];
 if (axisLoc.length > 0) {
   console.log("varLib.instancer started working.");
 
@@ -60,10 +62,10 @@ if (axisLoc.length > 0) {
     return `${key}=${value}`;
   });
 
-  files.forEach(async (file) => {
+  varLibInstancerPromises = files.map(async (file) => {
     try {
       const baseName = path.basename(file, ".ttf");
-      const fileName = noReplaceName
+      const fileName = !replaceName
         ? `${baseName}.ttf`
         : `${baseName}[${axisLoc
             .map((axis) => Object.keys(axis)[0])
@@ -72,12 +74,13 @@ if (axisLoc.length > 0) {
 
       const varLibInstancerData = await $`
         fonttools varLib.instancer \
+        --quiet \
         --output=${outputFile} \
         ${file} \
         ${axisLocToArgs};
       `
-        // The catch doesn't catch those errors.
-        // Test with ./src/index.mjs hh
+        // The try/catch above doesn't catch those errors.
+        // To test, run ./src/index.mjs hh and uncomment the Promise.catch.
         .catch((error) => {
           throw new VarLibInstancerError(error);
         });
@@ -94,18 +97,19 @@ if (axisLoc.length > 0) {
       varLibInstancerBar.tick();
     }
   });
+
+  Promise.all(varLibInstancerPromises).then(() => {
+    console.log("varLib.instancer completed the work.");
+  });
 }
 
 console.log("pyftsubset started working.");
-files.forEach((file) => {
-  flavors.forEach(async (flavor) => {
+
+const pyftsubsetPromises = files.reduce((all, file) => {
+  const flavorPromises = flavors.map(async (flavor) => {
     try {
-      const outputFile = toPOSIXPath(
-        path.resolve(
-          outputDirectory,
-          `${path.basename(file, ".ttf")}.${flavor}`
-        )
-      );
+      const fileName = `${path.basename(file, ".ttf")}.${flavor}`;
+      const outputFile = toPOSIXPath(path.resolve(outputDirectory, fileName));
 
       const pyftsubsetData = await $`
         pyftsubset ${file} \
@@ -114,8 +118,8 @@ files.forEach((file) => {
         --layout-features=${layoutFeatures} \
         --unicodes=${unicodes}
       `
-        // The catch doesn't catch those errors.
-        // Test with ./src/index.mjs hh
+        // The try/catch above doesn't catch those errors.
+        // To test, run ./src/index.mjs hh and uncomment the Promise.catch.
         .catch((error) => {
           throw new PyftSubsetError(error);
         });
@@ -132,7 +136,25 @@ files.forEach((file) => {
       pyftsubsetBar.tick();
     }
   });
+
+  return all.concat(flavorPromises);
+}, []);
+
+Promise.all(pyftsubsetPromises).then(() => {
+  console.log("pyftsubset completed the work.");
 });
 
-// TODO Needs promise.all. Replace forEach with maps.
-// if (verbose) await $`ls -lh ${outputDirectory}`;
+const allPromises = pyftsubsetPromises.concat(varLibInstancerPromises);
+Promise.all(allPromises).then(async () => {
+  if (verbose) {
+    try {
+      const outputDirectorySafe = toPOSIXPath(path.resolve(outputDirectory));
+      const lsResult = await $`ls -lh ${outputDirectorySafe}`;
+
+      console.log(`ls -lh on ${outputDirectorySafe}\n${lsResult.stdout}`);
+    } catch (error) {
+      printError(error);
+    }
+  }
+  console.log("program exits.");
+});

@@ -6,8 +6,8 @@ import { ApplicationError, printApplicationError } from "./errors.mjs";
 
 const defaultOptions = {
   OUTPUT_DIRECTORY: path.resolve(process.cwd(), "output"),
-  NO_REPLACE_NAME: false,
-  VERBOSE: false,
+  REPLACE_NAME: true,
+  VERBOSE: true,
   pyftsubset: {
     // OUTPUT_FILE: "?",
     FLAVORS: ["woff", "woff2"],
@@ -52,7 +52,7 @@ const parseMinimistArgs = (argv) => {
   const {
     outputDirectory,
     verbose,
-    noReplaceName,
+    "replace-name": replaceName,
     flavors,
     layoutFeatures,
     unicodes,
@@ -78,7 +78,8 @@ const parseMinimistArgs = (argv) => {
   }
 
   const parsedVerbose = verbose || defaultOptions.VERBOSE;
-  const parsedNoReplaceName = noReplaceName || defaultOptions.NO_REPLACE_NAME;
+  const parsedReplaceName =
+    replaceName === undefined ? defaultOptions.REPLACE_NAME : replaceName;
 
   const parsedFlavors = flavors
     ? minimistStringToArray(flavors)
@@ -106,7 +107,7 @@ const parseMinimistArgs = (argv) => {
   return {
     files: parsedFiles,
     verbose: parsedVerbose,
-    noReplaceName: parsedNoReplaceName,
+    replaceName: parsedReplaceName,
     outputDirectory: parsedOutputDirectory,
     flavors: parsedFlavors,
     layoutFeatures: parsedLayoutFeatures,
