@@ -77,7 +77,8 @@ const parseMinimistArgs = (argv) => {
     fs.mkdirSync(parsedOutputDirectory);
   }
 
-  const parsedVerbose = verbose || defaultOptions.VERBOSE;
+  const parsedVerbose =
+    verbose === undefined ? defaultOptions.VERBOSE : verbose;
   const parsedReplaceName =
     replaceName === undefined ? defaultOptions.REPLACE_NAME : replaceName;
 
