@@ -6,6 +6,8 @@ import { ApplicationError, printApplicationError } from "./errors.mjs";
 
 const defaultOptions = {
   OUTPUT_DIRECTORY: path.resolve(process.cwd(), "output"),
+  NO_REPLACE_NAME: false,
+  VERBOSE: false,
   pyftsubset: {
     // OUTPUT_FILE: "?",
     FLAVORS: ["woff", "woff2"],
@@ -47,15 +49,22 @@ const parseMinimistArgs = (argv) => {
     process.exit(1);
   }
 
-  const { outputDirectory, flavors, layoutFeatures, unicodes, ...rest } = argv;
+  const {
+    outputDirectory,
+    verbose,
+    noReplaceName,
+    flavors,
+    layoutFeatures,
+    unicodes,
+    ...rest
+  } = argv;
 
-  console.log({ rest });
+  // console.log({ rest });
 
   const parsedFiles = files.map((file) => {
     if (process.platform === "win32" && /^\/[a-z]\//.test(file)) {
       return file.replace(/\/([a-z])\//, (match, offset, string) => {
         const result = `${offset.toUpperCase()}:/`;
-        console.log({ match, offset, string, result });
         return result;
       });
     } else return file;
@@ -67,6 +76,9 @@ const parseMinimistArgs = (argv) => {
   if (!fs.existsSync(parsedOutputDirectory)) {
     fs.mkdirSync(parsedOutputDirectory);
   }
+
+  const parsedVerbose = verbose || defaultOptions.VERBOSE;
+  const parsedNoReplaceName = noReplaceName || defaultOptions.NO_REPLACE_NAME;
 
   const parsedFlavors = flavors
     ? minimistStringToArray(flavors)
@@ -93,6 +105,8 @@ const parseMinimistArgs = (argv) => {
 
   return {
     files: parsedFiles,
+    verbose: parsedVerbose,
+    noReplaceName: parsedNoReplaceName,
     outputDirectory: parsedOutputDirectory,
     flavors: parsedFlavors,
     layoutFeatures: parsedLayoutFeatures,

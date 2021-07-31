@@ -15,10 +15,18 @@ import {
 } from "./errors.mjs";
 import { toPOSIXPath } from "./toPOSIXPath.mjs";
 
-$.verbose = false;
+const {
+  files,
+  verbose,
+  noReplaceName,
+  outputDirectory,
+  flavors,
+  layoutFeatures,
+  unicodes,
+  axisLoc,
+} = parseMinimistArgs(argv);
 
-const { files, outputDirectory, flavors, layoutFeatures, unicodes, axisLoc } =
-  parseMinimistArgs(argv);
+$.verbose = false;
 
 const varLibInstancerBar = new ProgressBar(
   "varLib.instancer: :bar :current/:total files done.",
@@ -35,6 +43,8 @@ const pyftsubsetBar = new ProgressBar(
 
 console.log({
   files,
+  verbose,
+  noReplaceName,
   outputDirectory,
   flavors,
   layoutFeatures,
@@ -52,10 +62,13 @@ if (axisLoc.length > 0) {
 
   files.forEach(async (file) => {
     try {
-      // TODO: add for each axisLoc filename[wght,opsz].ttf
-      const outputFile = toPOSIXPath(
-        path.resolve(outputDirectory, `${path.basename(file, ".ttf")}.ttf`)
-      );
+      const baseName = path.basename(file, ".ttf");
+      const fileName = noReplaceName
+        ? `${baseName}.ttf`
+        : `${baseName}[${axisLoc
+            .map((axis) => Object.keys(axis)[0])
+            .join(",")}].ttf`;
+      const outputFile = toPOSIXPath(path.resolve(outputDirectory, fileName));
 
       const varLibInstancerData = await $`
         fonttools varLib.instancer \
@@ -120,3 +133,6 @@ files.forEach((file) => {
     }
   });
 });
+
+// TODO Needs promise.all. Replace forEach with maps.
+// if (verbose) await $`ls -lh ${outputDirectory}`;
