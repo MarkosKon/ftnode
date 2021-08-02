@@ -36,6 +36,12 @@ const varLibInstancerBar = new ProgressBar(
     total: files.length,
   }
 );
+const ttLibWoff2Bar = new ProgressBar(
+  "ttLib.woff2: :bar :current/:total files compressed.",
+  {
+    total: files.length,
+  }
+);
 const pyftsubsetBar = new ProgressBar(
   "pyftsubset: :bar :current/:total files done.",
   {
@@ -186,9 +192,24 @@ if (runBothPrograms) {
   if (axisLoc.length > 0) {
     console.log("varLib.instancer started working.");
 
-    varLibInstancerPromises = files.map(
-      createVarLibInstancerFile(axisLocToArgs)
-    );
+    varLibInstancerPromises = files.map(async (file) => {
+      const varLibFile = await createVarLibInstancerFile(axisLocToArgs)(file);
+
+      if (typeof varLibFile !== "string") return;
+
+      try {
+        const ttLibWoff2Data =
+          await $`fonttools ttLib.woff2 compress ${varLibFile}`;
+
+        if (ttLibWoff2Data.stdout) console.log(ttLibWoff2Data.stdout);
+
+        await $`rm ${varLibFile}`;
+
+        ttLibWoff2Bar.tick();
+      } catch (error) {
+        printApplicationError(error);
+      }
+    });
 
     Promise.all(varLibInstancerPromises).then(() => {
       console.log("varLib.instancer completed the work.");
