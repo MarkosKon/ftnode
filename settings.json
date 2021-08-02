@@ -2,7 +2,7 @@
   "verbose": true,
   "pyftsubset": true,
   "varLibInstancer": true,
-  "replaceName": false,
+  "appendAxes": false,
   "outputDirectory": "output",
   "flavors": ["woff", "woff2"],
   "layoutFeatures": "*",

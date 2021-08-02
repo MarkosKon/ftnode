@@ -20,7 +20,7 @@ const {
   verbose,
   pyftsubset,
   varLibInstancer,
-  replaceName,
+  appendAxes,
   outputDirectory,
   flavors,
   layoutFeatures,
@@ -52,7 +52,7 @@ const pyftsubsetBar = new ProgressBar(
 const createVarLibInstancerFile = (axisLocToArgs) => async (file) => {
   try {
     const baseName = path.basename(file, ".ttf");
-    const fileName = !replaceName
+    const fileName = !appendAxes
       ? `${baseName}.ttf`
       : `${baseName}[${axisLoc
           .map((axis) => Object.keys(axis)[0])
@@ -123,7 +123,7 @@ if (verbose)
     verbose, // --verbose, --no-verbose.
     pyftsubset, // --pyftsubset, --no-pyftsubset.
     varLibInstancer, // varlibinstancer, --no-varlibinstancer.
-    replaceName, // --replace-name, --no-replace-name
+    appendAxes, // --append-axes, --no-append-axes
     outputDirectory, // output-directory folder-name
     flavors, // --flavors woff,woff2
     layoutFeatures, // --layout-features "*", --layout-features "kern,liga,calt"

@@ -10,7 +10,7 @@ import {
 
 const defaultOptions = {
   OUTPUT_DIRECTORY: path.resolve(process.cwd(), "output"),
-  REPLACE_NAME: true,
+  APPEND_AXES: true,
   PYFTSUBSET: true,
   VAR_LIB_INSTANCER: true,
   VERBOSE: true,
@@ -33,7 +33,7 @@ const getUserSettings = (config) => {
         verbose,
         pyftsubset,
         varLibInstancer,
-        replaceName,
+        appendAxes,
         outputDirectory,
         flavors,
         layoutFeatures,
@@ -55,7 +55,7 @@ const getUserSettings = (config) => {
         verbose,
         pyftsubset,
         varLibInstancer,
-        replaceName,
+        appendAxes,
         outputDirectory,
         flavors,
         layoutFeatures,
@@ -122,7 +122,7 @@ const parseMinimistArgs = (argv) => {
     outputDirectory,
     config,
     verbose,
-    "replace-name": replaceName,
+    "append-axes": appendAxes,
     pyftsubset,
     varlibinstancer: varLibInstancer,
     flavors,
@@ -159,12 +159,12 @@ const parseMinimistArgs = (argv) => {
         : userSettings.verbose
       : verbose;
 
-  const parsedReplaceName =
-    replaceName === undefined
-      ? userSettings.replaceName === undefined
-        ? defaultOptions.REPLACE_NAME
-        : userSettings.replaceName
-      : replaceName;
+  const parsedAppendAxes =
+    appendAxes === undefined
+      ? userSettings.appendAxes === undefined
+        ? defaultOptions.APPEND_AXES
+        : userSettings.appendAxes
+      : appendAxes;
 
   const parsedPyftsubset =
     pyftsubset === undefined
@@ -204,7 +204,7 @@ const parseMinimistArgs = (argv) => {
     verbose: parsedVerbose,
     pyftsubset: parsedPyftsubset,
     varLibInstancer: parsedVarLibInstancer,
-    replaceName: parsedReplaceName,
+    appendAxes: parsedAppendAxes,
     outputDirectory: parsedOutputDirectory,
     flavors: parsedFlavors,
     layoutFeatures: parsedLayoutFeatures,
