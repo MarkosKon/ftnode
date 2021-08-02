@@ -96,8 +96,8 @@ const createPyftsubsetFile = (file) => async (flavor) => {
       pyftsubset ${file} \
       --output-file=${outputFile} \
       --flavor=${flavor} \
-      --layout-features=${layoutFeatures} \
-      --unicodes=${unicodes}
+      --layout-features=${layoutFeatures.join(", ")} \
+      --unicodes=${unicodes.join(", ")}
     `
       // The try/catch above doesn't catch those errors.
       // To test, run ./src/index.mjs hh and uncomment the Promise.catch.

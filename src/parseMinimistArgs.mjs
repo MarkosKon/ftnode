@@ -87,15 +87,15 @@ const toAxisLoc = (object) =>
     .map(([key, value]) => ({ [key]: value }));
 
 /**
- * Takes a minimist string, splits it on comma,
+ * Takes a minimist string, splits it on comma or space,
  * and returns an array with the items trimmed.
  * If the first item of the splitted array is "*",
- * it returns the string "*".
+ * it returns the "*" string.
  * @param {string} string Minimist string
  * @returns {string | string[]}
  */
 const minimistStringToArray = (string) => {
-  const array = string.split(",");
+  const array = string.split(/[,\ ]/);
 
   if (array[0] === ALL) return ALL;
   return array.map((item) => item.trim());
@@ -119,14 +119,14 @@ const parseMinimistArgs = (argv) => {
   }
 
   const {
-    outputDirectory,
+    "output-directory": outputDirectory,
     config,
     verbose,
     "append-axes": appendAxes,
     pyftsubset,
     varlibinstancer: varLibInstancer,
     flavors,
-    layoutFeatures,
+    "layout-features": layoutFeatures,
     unicodes,
     ...rest
   } = argv;
