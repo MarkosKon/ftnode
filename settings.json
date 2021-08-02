@@ -1,0 +1,12 @@
+{
+  "verbose": true,
+  "pyftsubset": true,
+  "varLibInstancer": true,
+  "replaceName": false,
+  "outputDirectory": "output",
+  "flavors": ["woff", "woff2"],
+  "layoutFeatures": "*",
+  "unicodes": "*",
+  "unicode.typo": "1",
+  "axisLoc": [{ "wght": "300:700" }]
+}

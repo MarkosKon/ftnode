@@ -148,6 +148,8 @@ if (runBothPrograms) {
     varLibInstancerPromises = files.map(async (file) => {
       const varLibFile = await createVarLibInstancerFile(axisLocToArgs)(file);
 
+      if (typeof varLibFile !== "string") return;
+
       if (firstTime) {
         firstTime = false;
         console.log("\npyftsubset started working.");
@@ -161,22 +163,23 @@ if (runBothPrograms) {
       return varLibFile;
     });
 
-    const filesToDelete = await Promise.all(varLibInstancerPromises).then(
-      (files) => {
+    const filesToDelete = await Promise.all(varLibInstancerPromises)
+      .then((files) => files.filter(Boolean))
+      .then((files) => {
         console.log("varLib.instancer completed the work.");
 
         return files;
-      }
-    );
+      });
 
     Promise.all(pyftsubsetPromises).then(() => {
       console.log("pyftsubset completed the work.");
 
-      $`rm ${filesToDelete}`
-        .then(() =>
-          console.log("Deleted the intermediate varLib.instancer files.")
-        )
-        .catch((error) => printError(error));
+      if (filesToDelete.length > 0)
+        $`rm ${filesToDelete}`
+          .then(() =>
+            console.log("Deleted the intermediate varLib.instancer files.")
+          )
+          .catch((error) => printError(error));
     });
   } else printVarLibInstancerError(messageNoAxes);
 } else if (varLibInstancer) {

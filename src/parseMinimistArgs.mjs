@@ -2,7 +2,11 @@ import path from "path";
 import fs from "fs";
 
 import { ALL } from "./globals.mjs";
-import { ApplicationError, printApplicationError } from "./errors.mjs";
+import {
+  ApplicationError,
+  printApplicationError,
+  printError,
+} from "./errors.mjs";
 
 const defaultOptions = {
   OUTPUT_DIRECTORY: path.resolve(process.cwd(), "output"),
@@ -10,14 +14,77 @@ const defaultOptions = {
   PYFTSUBSET: true,
   VAR_LIB_INSTANCER: true,
   VERBOSE: true,
-  pyftsubset: {
-    // OUTPUT_FILE: "?",
-    FLAVORS: ["woff", "woff2"],
-    UNICODES: "*",
-    LAYOUT_FEATURES: "*",
-  },
-  "varLib.instancer": {},
+  // OUTPUT_FILE: "?",
+  FLAVORS: ["woff", "woff2"],
+  UNICODES: "*",
+  LAYOUT_FEATURES: "*",
 };
+
+const getUserSettings = (config) => {
+  if (config) {
+    try {
+      const configPath = path.resolve(config);
+      const data = fs.readFileSync(configPath, (error) => {
+        if (error) throw new ApplicationError(error);
+      });
+
+      const temp = JSON.parse(data);
+      const {
+        verbose,
+        pyftsubset,
+        varLibInstancer,
+        replaceName,
+        outputDirectory,
+        flavors,
+        layoutFeatures,
+        unicodes,
+        axisLoc,
+        ...rest
+      } = temp;
+
+      if (rest && Object.keys(rest)) {
+        printApplicationError(
+          `The following keys from the configuration are ignored: ${Object.keys(
+            rest
+          ).join(", ")}. Type --help to see which fields you can use.\n`
+        );
+      }
+
+      // console.log({ rest });
+      return {
+        verbose,
+        pyftsubset,
+        varLibInstancer,
+        replaceName,
+        outputDirectory,
+        flavors,
+        layoutFeatures,
+        unicodes,
+        axisLoc,
+      };
+    } catch (error) {
+      if (error instanceof ApplicationError) printApplicationError(error);
+      else printError(error);
+      console.error(
+        "=== Ignoring the config file you provided due to the error(s) above."
+      );
+    }
+  }
+
+  // Return this object on failure of when there is no config
+  // to avoid property access errors.
+  return {};
+};
+
+const toAxisLoc = (object) =>
+  Object.entries(object)
+    .filter(
+      ([key, value]) =>
+        key.length === 4 &&
+        ![true, false, undefined, null, ""].includes(value) &&
+        /^((drop)|([0-9]+)|([0-9]+\:[0-9]+))$/.test(value)
+    )
+    .map(([key, value]) => ({ [key]: value }));
 
 /**
  * Takes a minimist string, splits it on comma,
@@ -53,6 +120,7 @@ const parseMinimistArgs = (argv) => {
 
   const {
     outputDirectory,
+    config,
     verbose,
     "replace-name": replaceName,
     pyftsubset,
@@ -65,6 +133,9 @@ const parseMinimistArgs = (argv) => {
 
   // console.log({ rest });
 
+  const userSettings = getUserSettings(config);
+  // console.log({ userSettings });
+
   const parsedFiles = files.map((file) => {
     if (process.platform === "win32" && /^\/[a-z]\//.test(file)) {
       return file.replace(/\/([a-z])\//, (match, offset, string) => {
@@ -76,44 +147,56 @@ const parseMinimistArgs = (argv) => {
 
   const parsedOutputDirectory = outputDirectory
     ? path.resolve(process.cwd(), outputDirectory)
-    : defaultOptions.OUTPUT_DIRECTORY;
+    : userSettings.outputDirectory || defaultOptions.OUTPUT_DIRECTORY;
   if (!fs.existsSync(parsedOutputDirectory)) {
     fs.mkdirSync(parsedOutputDirectory);
   }
 
   const parsedVerbose =
-    verbose === undefined ? defaultOptions.VERBOSE : verbose;
+    verbose === undefined
+      ? userSettings.verbose === undefined
+        ? defaultOptions.VERBOSE
+        : userSettings.verbose
+      : verbose;
+
   const parsedReplaceName =
-    replaceName === undefined ? defaultOptions.REPLACE_NAME : replaceName;
+    replaceName === undefined
+      ? userSettings.replaceName === undefined
+        ? defaultOptions.REPLACE_NAME
+        : userSettings.replaceName
+      : replaceName;
+
   const parsedPyftsubset =
-    pyftsubset === undefined ? defaultOptions.PYFTSUBSET : pyftsubset;
+    pyftsubset === undefined
+      ? userSettings.pyftsubset === undefined
+        ? defaultOptions.PYFTSUBSET
+        : userSettings.pyftsubset
+      : pyftsubset;
+
   const parsedVarLibInstancer =
     varLibInstancer === undefined
-      ? defaultOptions.VAR_LIB_INSTANCER
+      ? userSettings.varLibInstancer === undefined
+        ? defaultOptions.VAR_LIB_INSTANCER
+        : userSettings.varLibInstancer
       : varLibInstancer;
 
   const parsedFlavors = flavors
     ? minimistStringToArray(flavors)
-    : defaultOptions.pyftsubset.FLAVORS;
+    : userSettings.flavors || defaultOptions.FLAVORS;
 
   const parsedLayoutFeatures = layoutFeatures
     ? minimistStringToArray(layoutFeatures)
-    : defaultOptions.pyftsubset.LAYOUT_FEATURES;
+    : userSettings.layoutFeatures || defaultOptions.LAYOUT_FEATURES;
 
   const parsedUnicodes = unicodes
     ? minimistStringToArray(unicodes)
-    : defaultOptions.pyftsubset.UNICODES;
+    : userSettings.unicodes || defaultOptions.UNICODES;
 
-  const parsedAxisLoc = Object.entries(rest)
-    .filter(
-      ([key, value]) =>
-        key.length === 4 &&
-        ![true, false, undefined, null, ""].includes(value) &&
-        /^((drop)|([0-9]+)|([0-9]+\:[0-9]+))$/.test(value)
-    )
-    .map(([key, value]) => ({
-      [key]: value,
-    }));
+  const parsedAxisLoc = toAxisLoc(
+    userSettings.axisLoc
+      .concat(toAxisLoc(rest))
+      .reduce((res, next) => ({ ...res, ...next }), {})
+  );
 
   return {
     files: parsedFiles,
