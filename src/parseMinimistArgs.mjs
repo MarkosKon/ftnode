@@ -192,10 +192,11 @@ const parseMinimistArgs = (argv) => {
     ? minimistStringToArray(unicodes)
     : userSettings.unicodes || defaultOptions.UNICODES;
 
+  const duplicateAxisLoc = userSettings.axisLoc
+    ? userSettings.axisLoc.concat(toAxisLoc(rest))
+    : toAxisLoc(rest);
   const parsedAxisLoc = toAxisLoc(
-    userSettings.axisLoc
-      .concat(toAxisLoc(rest))
-      .reduce((res, next) => ({ ...res, ...next }), {})
+    duplicateAxisLoc.reduce((res, next) => ({ ...res, ...next }), {})
   );
 
   return {

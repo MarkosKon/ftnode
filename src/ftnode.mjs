@@ -119,16 +119,16 @@ const createPyftsubsetFile = (file) => async (flavor) => {
 
 if (verbose)
   console.log({
-    files,
-    verbose,
-    pyftsubset,
-    varLibInstancer,
-    replaceName,
-    outputDirectory,
-    flavors,
-    layoutFeatures,
-    unicodes,
-    axisLoc,
+    files, // positional arguments.
+    verbose, // --verbose, --no-verbose.
+    pyftsubset, // --pyftsubset, --no-pyftsubset.
+    varLibInstancer, // varlibinstancer, --no-varlibinstancer.
+    replaceName, // --replace-name, --no-replace-name
+    outputDirectory, // output-directory folder-name
+    flavors, // --flavors woff,woff2
+    layoutFeatures, // --layout-features "*", --layout-features "kern,liga,calt"
+    unicodes, // --unicode "*", --unicodes: "U+00-FF, U+2009"
+    axisLoc, // --weight 300:700 --opsz 15:50 --FLAR 50 --VOLM drop
   });
 
 let pyftsubsetPromises = [];
