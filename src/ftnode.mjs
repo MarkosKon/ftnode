@@ -14,6 +14,7 @@ import {
   printError,
 } from "./errors.mjs";
 import { toPOSIXPath } from "./toPOSIXPath.mjs";
+import { ALL } from "./globals.mjs";
 
 const {
   files,
@@ -96,8 +97,10 @@ const createPyftsubsetFile = (file) => async (flavor) => {
       pyftsubset ${file} \
       --output-file=${outputFile} \
       --flavor=${flavor} \
-      --layout-features=${layoutFeatures.join(", ")} \
-      --unicodes=${unicodes.join(", ")}
+      --layout-features=${
+        layoutFeatures === ALL ? layoutFeatures : layoutFeatures.join(", ")
+      } \
+      --unicodes=${unicodes === ALL ? unicodes : unicodes.join(", ")}
     `
       // The try/catch above doesn't catch those errors.
       // To test, run ./src/index.mjs hh and uncomment the Promise.catch.
