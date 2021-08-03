@@ -140,11 +140,18 @@ For example: ftnode.mjs --unicodes AA FF -- ./file1.ttf ./file2.ttf\n`
     parsedArgs
   );
 
+  // Resolve the outputDirectory after the settings are merged.
   const resolvedOutputDirectory = path.resolve(finalSettings.outputDirectory);
   if (!fs.existsSync(resolvedOutputDirectory)) {
     fs.mkdirSync(resolvedOutputDirectory);
   }
   finalSettings.outputDirectory = resolvedOutputDirectory;
+
+  // Opt out of lodash array field merge.
+  const mergedAxisLoc = toAxisLoc(
+    fileAxisLoc.concat(axisLoc).reduce((res, next) => ({ ...res, ...next }), {})
+  );
+  finalSettings.axisLoc = mergedAxisLoc;
 
   return finalSettings;
 };

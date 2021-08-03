@@ -236,6 +236,16 @@ Type fontools varLib.instancer --help for more details.\n`;
     if (verbose && runEitherProgram) {
       try {
         const outputDirectorySafe = toPOSIXPath(path.resolve(outputDirectory));
+        // TODO this sometimes fails if --varlibinstancer because it tries to
+        // ls the intermediate ttf file. It presents an error like this one:
+        // === Unknown error.
+        //  ls: cannot access 'C:/Users/asdf/Desktop/testing-ftnode/Open Sans/OpenSans[wdth,wght].ttf': No such file or directory
+        // total 324K
+        // -rw-r--r-- 1 asdf 197121 167K Aug  3 21:15 OpenSans-Italic[wdth,wght]-greek-condensed.woff2
+        // -rw-r--r-- 1 asdf 197121 155K Aug  3 21:15 OpenSans[wdth,wght]-greek-condensed.woff2
+        // -????????? ? ?    ?         ?            ? OpenSans[wdth,wght].ttf
+        // === Unknown error end.
+
         const lsResult = await $`ls -lh ${outputDirectorySafe}`;
 
         console.log(`ls -lh on ${outputDirectorySafe}\n${lsResult.stdout}`);
