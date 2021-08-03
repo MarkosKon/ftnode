@@ -5,7 +5,6 @@ import ProgressBar from "progress";
 
 import { parseMinimistArgs } from "./parseMinimistArgs.mjs";
 import {
-  ApplicationError,
   PyftSubsetError,
   VarLibInstancerError,
   printApplicationError,
@@ -14,7 +13,6 @@ import {
   printError,
 } from "./errors.mjs";
 import { toPOSIXPath } from "./toPOSIXPath.mjs";
-import { ALL } from "./globals.mjs";
 
 const {
   files,
