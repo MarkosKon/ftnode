@@ -92,7 +92,7 @@ const toAxisLoc = (object) =>
  * If the first item of the splitted array is "*",
  * it returns the "*" string.
  * @param {string} string Minimist string
- * @returns {string | string[]}
+ * @returns {"*" | string[]}
  */
 const minimistStringToArray = (string) => {
   const array = string.split(/[,\ ]/);

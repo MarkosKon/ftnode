@@ -33,21 +33,15 @@ $.verbose = false;
 
 const varLibInstancerBar = new ProgressBar(
   "varLib.instancer: :bar :current/:total files done.",
-  {
-    total: files.length,
-  }
+  { total: files.length }
 );
 const ttLibWoff2Bar = new ProgressBar(
   "ttLib.woff2: :bar :current/:total files compressed.",
-  {
-    total: files.length,
-  }
+  { total: files.length }
 );
 const pyftsubsetBar = new ProgressBar(
   "pyftsubset: :bar :current/:total files done.",
-  {
-    total: files.length * flavors.length,
-  }
+  { total: files.length * flavors.length }
 );
 
 const createVarLibInstancerFile = (axisLocToArgs) => async (file) => {
@@ -60,23 +54,19 @@ const createVarLibInstancerFile = (axisLocToArgs) => async (file) => {
           .join(",")}].ttf`;
     const outputFile = toPOSIXPath(path.resolve(outputDirectory, fileName));
 
-    const varLibInstancerData = await $`
+    const { stdout } = await $`
       fonttools varLib.instancer \
       --quiet \
       --output=${outputFile} \
       ${file} \
       ${axisLocToArgs};
     `
-      // The try/catch above doesn't catch those errors.
-      // To test, run ./src/index.mjs hh and uncomment the Promise.catch.
+      // Want to throw a specific error (VarLibInstancerError).
       .catch((error) => {
         throw new VarLibInstancerError(error);
       });
 
-    console.log(varLibInstancerData.stdout);
-
-    if (varLibInstancerData.stderr)
-      throw new VarLibInstancerError(varLibInstancerData.stderr);
+    console.log(stdout);
 
     return outputFile;
   } catch (error) {
@@ -93,27 +83,25 @@ const createPyftsubsetFile = (file) => async (flavor) => {
     const fileName = `${path.basename(file, ".ttf")}.${flavor}`;
     const outputFile = toPOSIXPath(path.resolve(outputDirectory, fileName));
 
-    const pyftsubsetData = await $`
+    const { stdout } = await $`
       pyftsubset ${file} \
       --output-file=${outputFile} \
       --flavor=${flavor} \
       --layout-features=${
-        layoutFeatures === ALL ? layoutFeatures : layoutFeatures.join(", ")
+        Array.isArray(layoutFeatures)
+          ? layoutFeatures.join(", ")
+          : layoutFeatures
       } \
-      --unicodes=${unicodes === ALL ? unicodes : unicodes.join(", ")}
+      --unicodes=${Array.isArray(unicodes) ? unicodes.join(", ") : unicodes}
     `
-      // The try/catch above doesn't catch those errors.
-      // To test, run ./src/index.mjs hh and uncomment the Promise.catch.
+      // Want to throw a specific error (PyftSubsetError).
       .catch((error) => {
         throw new PyftSubsetError(error);
       });
 
-    console.log(pyftsubsetData.stdout);
-
-    if (pyftsubsetData.stderr) throw new PyftSubsetError(pyftsubsetData.stderr);
+    console.log(stdout);
   } catch (error) {
-    if (error instanceof ApplicationError) printApplicationError(error);
-    else if (error instanceof PyftSubsetError) printPyftSubsetError(error);
+    if (error instanceof PyftSubsetError) printPyftSubsetError(error);
     else printError(error);
   } finally {
     pyftsubsetBar.tick();
@@ -190,7 +178,7 @@ if (runBothPrograms) {
           )
           .catch((error) => printError(error));
     });
-  } else printVarLibInstancerError(messageNoAxes);
+  } else printApplicationError(messageNoAxes);
 } else if (varLibInstancer) {
   if (axisLoc.length > 0) {
     console.log("varLib.instancer started working.");
@@ -217,7 +205,7 @@ if (runBothPrograms) {
     Promise.all(varLibInstancerPromises).then(() => {
       console.log("varLib.instancer completed the work.");
     });
-  } else printVarLibInstancerError(messageNoAxes);
+  } else printApplicationError(messageNoAxes);
 } else if (pyftsubset) {
   console.log("pyftsubset started working.");
 
