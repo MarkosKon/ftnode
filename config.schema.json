@@ -39,57 +39,57 @@
     "verbose": {
       "$id": "#/properties/verbose",
       "type": "boolean",
-      "title": "The verbose schema",
+      "title": "verbose option",
       "description": "An explanation about the purpose of this instance.",
-      "default": false,
+      "default": true,
       "examples": [true]
     },
     "pyftsubset": {
       "$id": "#/properties/pyftsubset",
       "type": "boolean",
-      "title": "The pyftsubset schema",
-      "description": "An explanation about the purpose of this instance.",
-      "default": false,
+      "title": "pyftsubset option",
+      "description": "If the program should use pyftsubset.",
+      "default": true,
       "examples": [true]
     },
     "varLibInstancer": {
       "$id": "#/properties/varLibInstancer",
       "type": "boolean",
-      "title": "The varLibInstancer schema",
-      "description": "An explanation about the purpose of this instance.",
-      "default": false,
+      "title": "varLibInstancer option",
+      "description": "If the program should use varLib.instancer.",
+      "default": true,
       "examples": [true]
     },
     "appendAxes": {
       "$id": "#/properties/appendAxes",
       "type": "boolean",
-      "title": "The appendAxes schema",
-      "description": "An explanation about the purpose of this instance.",
+      "title": "appendAxes option",
+      "description": "If the program should append the variable fonts axes in the output filenames. For example, the filename.ttf will become filename[wght,opsz,CUSTOM].ttf. That is assuming you used the options --wght, --opsz, and --CUSTOM (the program does not analyze the font file for available axes).",
       "default": false,
       "examples": [false]
     },
     "suffix": {
       "$id": "#/properties/suffix",
       "type": "string",
-      "title": "The suffix schema",
-      "description": "An explanation about the purpose of this instance.",
+      "title": "suffix option",
+      "description": "A string to append to the filename if you use pyftsubset. For example, the filename.ttf with suffix 'english' will become filename-english.woff2.",
       "default": "",
       "examples": ["greek"]
     },
     "outputDirectory": {
       "$id": "#/properties/outputDirectory",
       "type": "string",
-      "title": "The outputDirectory schema",
-      "description": "An explanation about the purpose of this instance.",
+      "title": "outputDirectory option",
+      "description": "The directory to store the fonts.",
       "default": "",
       "examples": ["output"]
     },
     "flavors": {
       "$id": "#/properties/flavors",
       "type": "array",
-      "title": "The flavors schema",
-      "description": "An explanation about the purpose of this instance.",
-      "default": [],
+      "title": "flavors option",
+      "description": "The file formats that pyftsubset will create. Type 'pyftsubset --help | grep -i flavor' for the available options.",
+      "default": [["woff2"]],
       "examples": [["woff2"]],
       "additionalItems": true,
       "items": {
@@ -98,10 +98,10 @@
           {
             "$id": "#/properties/flavors/items/anyOf/0",
             "type": "string",
-            "title": "The first anyOf schema",
+            "title": "flavor",
             "description": "An explanation about the purpose of this instance.",
-            "default": "",
-            "examples": ["woff2"]
+            "default": "woff2",
+            "examples": ["woff2", "woff"]
           }
         ]
       }
@@ -109,17 +109,17 @@
     "layoutFeatures": {
       "$id": "#/properties/layoutFeatures",
       "type": "string",
-      "title": "The layoutFeatures schema",
-      "description": "An explanation about the purpose of this instance.",
-      "default": "",
+      "title": "layoutFeatures option",
+      "description": "The layout-features from pyftsubset.",
+      "default": "*",
       "examples": ["*"]
     },
     "unicodes": {
       "$id": "#/properties/unicodes",
       "type": "string",
-      "title": "The unicodes schema",
-      "description": "An explanation about the purpose of this instance.",
-      "default": "",
+      "title": "unicodes option",
+      "description": "The unicode characters from pyftsubset.",
+      "default": "*",
       "examples": [
         "U+20-22, U+24-3E, U+40, U+5B-5F, U+7C, U+A0, U+A7, U+A9, U+AB, U+BB, U+301, U+308, U+386, U+388-38A, U+38C, U+38E-3A1, U+3A3-3CE, U+2010-2011, U+2013-2014, U+2026, U+2030, U+20AC, U+20-5F, U+61-7A, U+7C, U+A0, U+A7, U+A9, U+2010-2011, U+2013-2014, U+2018-2019, U+201C-201D, U+2020-2021, U+2026, U+2030, U+2032-2033, U+20AC"
       ]
@@ -127,13 +127,29 @@
     "axisLoc": {
       "$id": "#/properties/axisLoc",
       "type": "array",
-      "title": "The axisLoc schema",
-      "description": "An explanation about the purpose of this instance.",
+      "title": "axisLoc option",
+      "description": "The variable font's axes that the program passes to varLib.instancer.",
       "default": [],
       "examples": [
         [
           {
             "wght": "400:700"
+          }
+        ],
+        [
+          {
+            "wght": "400:700",
+            "opsz": "drop"
+          }
+        ],
+        [
+          {
+            "wdth": "125"
+          }
+        ],
+        [
+          {
+            "CUSTOM": "0:100"
           }
         ]
       ],
