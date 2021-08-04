@@ -22,6 +22,7 @@ $.verbose = false;
 async function main(args) {
   const {
     files,
+    config,
     verbose,
     pyftsubset,
     varLibInstancer,
@@ -38,6 +39,7 @@ async function main(args) {
   if (verbose) {
     console.log({
       files,
+      config,
       verbose,
       pyftsubset,
       varLibInstancer,
@@ -252,27 +254,30 @@ yargs(hideBin(process.argv))
   .scriptName(scriptName)
   .command({
     command: `$0 [options] <args..>`,
-    description:
-      "A script that runs a list of font files through varLib.instancer and or pyftsubset. The mentioned tools are from the python package fonttools, and you need to install with pip install fonttools. Tip: For each boolean option, you can pass --no-option-name to disable it if it's enabled by default (e.g. --no-pyftsubset).",
+    description: `A script that runs a list of font files through varLib.instancer and/or pyftsubset. varLib.instancer and pyftsubset are part of the python package fonttools, and for this script to work, you need to install them with 'pip install fonttools'.
+Tip: For each boolean option the program supports, you can pass --no-option-name to disable it if it's enabled by default (e.g. --no-pyftsubset).`,
     builder: (yargs) => {
       return yargs
         .positional("args", {
           describe:
-            "The font files you want to transform. Tip: If the last option is an array, for example: --layout-features, --flavors, or --unicodes, you have to denote the end of options with --, just before the files. See the examples below.",
+            "The font files you want to transform. Tip: If the last option is an array, for example: --layout-features, --flavors, or --unicodes, you have to denote the end of the options with --, just before the files (args). See the examples below.",
           type: "string",
         })
         .example(
           "$0 --wght 400:700 Literata[opsz,wght].ttf",
-          "Limit the wght axis from 400 to 700, and create 2 files (woff, woff2) with all the layout features and characters."
+          "Limit the wght axis from 400 to 700, and create a woff2 file with all the layout features and characters."
         )
-        .example("$0 --no-varlibinstancer *ttf", "Only subset files.")
+        .example(
+          "$0 --no-varlibinstancer *ttf",
+          "Run only pyftsubset on the font files."
+        )
         .example(
           "$0 --config settings.json .Piazzolla*ttf",
-          "Use a config file in JSON format (recommended). You can pass arguments to override the config."
+          "Use a config file in JSON format (recommended). You can still pass arguments to the program to override the config. The order of importance is: arguments > config file > default options."
         )
         .example(
           "$0 --no-varlibinstancer --unicodes AA FF DD -- *ttf",
-          "Only subset files. Because --unicodes is an array and the last option before the files, you have to denote the end of options with --. Alternatively, you can pass a non-array option last."
+          "You need -- if the last option is an array type. Because --unicodes is an array and the last option before the files, you have to denote the end of options with --. Alternatively, you can pass a non-array option last."
         )
         .epilog("Made by Markos Konstantopoulos https://markoskon.com.");
     },
@@ -280,22 +285,28 @@ yargs(hideBin(process.argv))
   })
   .option("V", {
     alias: "verbose",
-    description: `Include extra info about the conversions. 
+    description: `Include extra info about the conversions. (TODO Not implemented well) 
 [default: ${defaultOptions.verbose}]`,
     type: "boolean",
   })
   .option("p", {
     alias: "pyftsubset",
-    description: `If the program should use pyftsubset.
+    description: `If the program should use pyftsubset. The pyftsubset flags used by the program are --layout-features, --unicodes, and --flavors (it's called --flavor in pyftsubset).
 [default: ${defaultOptions.pyftsubset}]`,
     type: "boolean",
   })
   .option("i", {
     alias: "varlibinstancer",
     description: `If the program should use varLib.instancer.
-You have to pass at least one variable axis (as a regular option) if the varlibinstancer option is true. For example, if you want to limit the variable font's weight axis, you can pass --wght 400:700. If you want to drop the opsz axis, you pass --opsz drop. If you want to instantiate the wdth axis to 125, pass --wdth 125. For custom axes, pass --CUSTOM 0:100 (uppercase). If the variable font supports an axis and you don't pass an option to limit it, varLib.instancer will keep that axis intact and will not limit it. If you don't use pyftsubset (--no-pyftsubset), the program will compress the font with ttLib.woff2. 
+You have to pass at least one variable axis (as a regular option) if the varlibinstancer option is true. For example, if you want to limit the variable font's weight axis from 400 to 700, you can pass --wght 400:700. If you want to drop the opsz axis, you pass --opsz drop. If you want to instantiate the wdth axis to 125, pass --wdth 125. For custom axes, pass --CUSTOM 0:100 (uppercase). If the variable font supports an axis and you don't pass an option to limit it, varLib.instancer will keep that axis intact and will not limit it. If you don't use pyftsubset (--no-pyftsubset), the program will compress the font with ttLib.woff2. 
 [default: ${defaultOptions.varLibInstancer}]`,
     type: "boolean",
+  })
+  .option("c", {
+    alias: "config",
+    description: `Use a config file (JSON format) to pass options to the program. This is preferred compared to passing arguments in the command because you can document the settings and use them again later.
+[default: ""]`,
+    type: "string",
   })
   .option("a", {
     alias: "append-axes",
@@ -323,15 +334,15 @@ You have to pass at least one variable axis (as a regular option) if the varlibi
   })
   .option("l", {
     alias: "layout-features",
-    description: `The layout-features from pyftsubset.
+    description: `The layout-features from pyftsubset. Type 'pyftsubset --help | grep -i layout-features' or just 'pyftsubset --help' for more info.
 [default: "${defaultOptions.layoutFeatures}"]`,
     type: "array",
   })
   .option("u", {
     alias: "unicodes",
-    description: `The unicode characters from pyftsubset.
+    description: `The unicode characters from pyftsubset. Type 'pyftsubset --help | grep -i unicodes' or just 'pyftsubset --help' for more info.
 [default: "${defaultOptions.unicodes}"]`,
     type: "array",
   })
   .describe("help", "Show this help menu.")
-  .describe("version", "Show version number.").argv;
+  .describe("version", "Show the version number. (TODO)").argv;

@@ -71,6 +71,7 @@ For example: ftnode.mjs --unicodes AA FF -- ./file1.ttf ./file2.ttf\n`
 
   const parsedArgs = {
     files: transformedFiles,
+    config,
     verbose,
     pyftsubset,
     varLibInstancer: varlibinstancer,
