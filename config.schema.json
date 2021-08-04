@@ -1,0 +1,173 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "title": "Fonttools node schema",
+  "description": "Fonttools node schema to help you write config files for ftnode CLI.",
+  "default": {},
+  "examples": [
+    {
+      "verbose": true,
+      "pyftsubset": true,
+      "varLibInstancer": true,
+      "appendAxes": false,
+      "suffix": "greek",
+      "outputDirectory": "output",
+      "flavors": ["woff2"],
+      "layoutFeatures": "*",
+      "unicodes": "U+20-22, U+24-3E, U+40, U+5B-5F, U+7C, U+A0, U+A7, U+A9, U+AB, U+BB, U+301, U+308, U+386, U+388-38A, U+38C, U+38E-3A1, U+3A3-3CE, U+2010-2011, U+2013-2014, U+2026, U+2030, U+20AC, U+20-5F, U+61-7A, U+7C, U+A0, U+A7, U+A9, U+2010-2011, U+2013-2014, U+2018-2019, U+201C-201D, U+2020-2021, U+2026, U+2030, U+2032-2033, U+20AC",
+      "axisLoc": [
+        {
+          "wght": "400:700"
+        }
+      ]
+    }
+  ],
+  "required": [
+    "verbose",
+    "pyftsubset",
+    "varLibInstancer",
+    "appendAxes",
+    "suffix",
+    "outputDirectory",
+    "flavors",
+    "layoutFeatures",
+    "unicodes",
+    "axisLoc"
+  ],
+  "properties": {
+    "verbose": {
+      "$id": "#/properties/verbose",
+      "type": "boolean",
+      "title": "The verbose schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": false,
+      "examples": [true]
+    },
+    "pyftsubset": {
+      "$id": "#/properties/pyftsubset",
+      "type": "boolean",
+      "title": "The pyftsubset schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": false,
+      "examples": [true]
+    },
+    "varLibInstancer": {
+      "$id": "#/properties/varLibInstancer",
+      "type": "boolean",
+      "title": "The varLibInstancer schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": false,
+      "examples": [true]
+    },
+    "appendAxes": {
+      "$id": "#/properties/appendAxes",
+      "type": "boolean",
+      "title": "The appendAxes schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": false,
+      "examples": [false]
+    },
+    "suffix": {
+      "$id": "#/properties/suffix",
+      "type": "string",
+      "title": "The suffix schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": ["greek"]
+    },
+    "outputDirectory": {
+      "$id": "#/properties/outputDirectory",
+      "type": "string",
+      "title": "The outputDirectory schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": ["output"]
+    },
+    "flavors": {
+      "$id": "#/properties/flavors",
+      "type": "array",
+      "title": "The flavors schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": [],
+      "examples": [["woff2"]],
+      "additionalItems": true,
+      "items": {
+        "$id": "#/properties/flavors/items",
+        "anyOf": [
+          {
+            "$id": "#/properties/flavors/items/anyOf/0",
+            "type": "string",
+            "title": "The first anyOf schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": ["woff2"]
+          }
+        ]
+      }
+    },
+    "layoutFeatures": {
+      "$id": "#/properties/layoutFeatures",
+      "type": "string",
+      "title": "The layoutFeatures schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": ["*"]
+    },
+    "unicodes": {
+      "$id": "#/properties/unicodes",
+      "type": "string",
+      "title": "The unicodes schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "U+20-22, U+24-3E, U+40, U+5B-5F, U+7C, U+A0, U+A7, U+A9, U+AB, U+BB, U+301, U+308, U+386, U+388-38A, U+38C, U+38E-3A1, U+3A3-3CE, U+2010-2011, U+2013-2014, U+2026, U+2030, U+20AC, U+20-5F, U+61-7A, U+7C, U+A0, U+A7, U+A9, U+2010-2011, U+2013-2014, U+2018-2019, U+201C-201D, U+2020-2021, U+2026, U+2030, U+2032-2033, U+20AC"
+      ]
+    },
+    "axisLoc": {
+      "$id": "#/properties/axisLoc",
+      "type": "array",
+      "title": "The axisLoc schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": [],
+      "examples": [
+        [
+          {
+            "wght": "400:700"
+          }
+        ]
+      ],
+      "additionalItems": true,
+      "items": {
+        "$id": "#/properties/axisLoc/items",
+        "anyOf": [
+          {
+            "$id": "#/properties/axisLoc/items/anyOf/0",
+            "type": "object",
+            "title": "The first anyOf schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+              {
+                "wght": "400:700"
+              }
+            ],
+            "required": ["wght"],
+            "properties": {
+              "wght": {
+                "$id": "#/properties/axisLoc/items/anyOf/0/properties/wght",
+                "type": "string",
+                "title": "The wght schema",
+                "description": "An explanation about the purpose of this instance.",
+                "default": "",
+                "examples": ["400:700"]
+              }
+            },
+            "additionalProperties": true
+          }
+        ]
+      }
+    }
+  },
+  "additionalProperties": true
+}

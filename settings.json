@@ -1,12 +1,18 @@
 {
+  "$schema": "./config.schema.json",
   "verbose": true,
   "pyftsubset": true,
   "varLibInstancer": true,
   "appendAxes": false,
+  "suffix": "greek",
   "outputDirectory": "output",
   "flavors": ["woff", "woff2"],
   "layoutFeatures": "*",
   "unicodes": "U+20-22, U+24-3E, U+40, U+5B-5F, U+7C, U+A0, U+A7, U+A9, U+AB, U+BB, U+301, U+308, U+386, U+388-38A, U+38C, U+38E-3A1, U+3A3-3CE, U+2010-2011, U+2013-2014, U+2026, U+2030, U+20AC, U+20-5F, U+61-7A, U+7C, U+A0, U+A7, U+A9, U+2010-2011, U+2013-2014, U+2018-2019, U+201C-201D, U+2020-2021, U+2026, U+2030, U+2032-2033, U+20AC",
   "unicode.typo": "1",
-  "axisLoc": [{ "wght": "300:700" }]
+  "axisLoc": [
+    {
+      "wght": "400:700"
+    }
+  ]
 }
