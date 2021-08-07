@@ -1,8 +1,8 @@
+import { scriptName as applicationName } from "./globals.mjs";
+
 class ApplicationError extends Error {}
 class VarLibInstancerError extends Error {}
 class PyftSubsetError extends Error {}
-
-const applicationName = argv._[0];
 
 /**
  * @param {string} errorMessage
