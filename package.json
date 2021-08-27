@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "license": "MIT",
   "main": "src/ftnode.js",
+  "bin": {
+    "ftnode": "./src/ftnode.mjs"
+  },
   "scripts": {
     "clean": "rm -r ./output",
-    "dump-help": "node ./src/ftnode.mjs --help > help.txt"
+    "dump-help": "zx ./src/ftnode.mjs --help > help.txt"
   },
   "dependencies": {
     "lodash.merge": "^4.6.2",
