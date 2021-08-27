@@ -1,6 +1,6 @@
 # Font tools node
 
-A script that runs a list of font files through `varLib.instancer` and/or `pyftsubset`. `varLib.instancer` and `pyftsubset` are part of the python package `fonttools`, and for this script to work, you need to install them with 'pip install fonttools Brotli` (Brotli is required by the fontttools).
+A script that runs a list of font files through `varLib.instancer` and/or `pyftsubset`. `varLib.instancer` and `pyftsubset` are part of the python package `fonttools`, and for this script to work, you need to install them with `pip install fonttools Brotli` (Brotli is required by the fontttools).
 
 I'm also using `zx` to simplify child processes with Node, so you'll need to install it with `npm i -g zx`.
 
