@@ -4,7 +4,8 @@
   "license": "MIT",
   "main": "src/ftnode.js",
   "scripts": {
-    "clean": "rm -r ./output"
+    "clean": "rm -r ./output",
+    "dump-help": "node ./src/ftnode.mjs --help > help.txt"
   },
   "dependencies": {
     "lodash.merge": "^4.6.2",
