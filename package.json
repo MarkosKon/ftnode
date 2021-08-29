@@ -3,6 +3,7 @@
   "description": "A script that runs a list of font files through varLib.instancer and/or pyftsubset.",
   "version": "0.1.0",
   "license": "MIT",
+  "type": "module",
   "repository": "MarkosKon/ftnode",
   "keywords": [
     "typography",
