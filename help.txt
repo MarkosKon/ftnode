@@ -1,4 +1,4 @@
-ftnode.mjs [options] <args..>
+ftnode [options] <args..>
 
 A script that runs a list of font files through varLib.instancer and/or
 pyftsubset. varLib.instancer and pyftsubset are part of the python package
@@ -71,19 +71,19 @@ Options:
                           [default: "*"]                                 [array]
 
 Examples:
-  ftnode.mjs --wght 400:700                 Limit the wght axis from 400 to 700,
+  ftnode --wght 400:700                     Limit the wght axis from 400 to 700,
   Literata[opsz,wght].ttf                   and create a woff2 file with all the
                                             layout features and characters.
-  ftnode.mjs --no-varlibinstancer *ttf      Run only pyftsubset on the font
+  ftnode --no-varlibinstancer *ttf          Run only pyftsubset on the font
                                             files.
-  ftnode.mjs --config settings.json         Use a config file in JSON format
+  ftnode --config settings.json             Use a config file in JSON format
   .Piazzolla*ttf                            (recommended). You can still pass
                                             arguments to the program to override
                                             the config. The order of importance
                                             is: arguments > config file >
                                             default options.
-  ftnode.mjs --no-varlibinstancer           You need -- if the last option is an
-  --unicodes AA FF DD -- *ttf               array type. Because --unicodes is an
+  ftnode --no-varlibinstancer --unicodes    You need -- if the last option is an
+  AA FF DD -- *ttf                          array type. Because --unicodes is an
                                             array and the last option before the
                                             files, you have to denote the end of
                                             options with --. Alternatively, you

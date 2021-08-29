@@ -279,7 +279,7 @@ Tip: For each boolean option the program supports, you can pass --no-option-name
           "$0 --no-varlibinstancer --unicodes AA FF DD -- *ttf",
           "You need -- if the last option is an array type. Because --unicodes is an array and the last option before the files, you have to denote the end of options with --. Alternatively, you can pass a non-array option last."
         )
-        .epilog("Made by Markos Konstantopoulos https://markoskon.com.");
+        .epilog("Made by Markos Konstantopoulos https://markoskon.com. For bugs and new features, please open an issue at https://github.com/MarkosKon/ftnode.");
     },
     handler: (argv) => main(argv),
   })

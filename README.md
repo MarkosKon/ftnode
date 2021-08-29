@@ -1,6 +1,6 @@
 # Font tools node
 
-A script that runs a list of font files through `varLib.instancer` and/or `pyftsubset`.
+A script that runs a list of font files through `varLib.instancer` and/or `pyftsubset`. See the [help menu](help.txt).
 
 ## Dependencies
 
@@ -12,10 +12,7 @@ Needless to say that you need Python and Node to install the dependencies mentio
 
 ## How to run
 
-- Clone the repo `git clone https://github.com/MarkosKon/ftnode.git`
-- Change the directory `cd ftnode`.
-- Run the executable with `./src/ftnode.mjs --wght 400:700 Literata[opsz,wght].ttf` or `zx ./src/ftnode.mjs --wght 400:700 Literata[opsz,wght].ttf`.
-- Or install it globally with `npm link` and then run it with `ftnode --wght 400:700 Literata[opsz,wght].ttf`.
+`npm i -g ftnode`
 
 ## How to use
 

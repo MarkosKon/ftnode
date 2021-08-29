@@ -1,8 +1,21 @@
 {
   "name": "ftnode",
+  "description": "A script that runs a list of font files through varLib.instancer and/or pyftsubset.",
   "version": "1.0.0",
   "license": "MIT",
-  "main": "src/ftnode.js",
+  "repository": "MarkosKon/ftnode",
+  "keywords": [
+    "typography",
+    "fonts",
+    "subset",
+    "fonttools",
+    "cli",
+    "command-line"
+  ],
+  "author": {
+    "name": "Markos Konstantopoulos",
+    "url": "https://markoskon.com"
+  },
   "bin": {
     "ftnode": "./src/ftnode.mjs"
   },
