@@ -41,7 +41,7 @@ const enhanceYargs = ({
   unicodes,
   ...restArgs
 }) => {
-  const files = _.length > 0 ? _ : args.slice(1);
+  const files = _.length > 0 ? _ : args;
 
   try {
     if (files.length === 0)
@@ -150,7 +150,7 @@ For example: ftnode --unicodes AA FF -- ./file1.ttf ./file2.ttf\n`
 
   // Opt out of lodash array field merge.
   const mergedAxisLoc = toAxisLoc(
-    axisLoc.concat(fileAxisLoc).reduce((res, next) => ({ ...res, ...next }), {})
+    (fileAxisLoc || []).concat(axisLoc).reduce((res, next) => ({ ...res, ...next }), {})
   );
   finalSettings.axisLoc = mergedAxisLoc;
 
