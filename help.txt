@@ -1,92 +1,93 @@
 ftnode [options] <args..>
 
-A script that runs a list of font files through varLib.instancer and/or
-pyftsubset. varLib.instancer and pyftsubset are part of the python package
-fonttools, and for this script to work, you need to install them with 'pip
-install fonttools'.
-Tip: For each boolean option the program supports, you can pass --no-option-name
-to disable it if it's enabled by default (e.g. --no-pyftsubset).
+A script that runs a list of font files through varLib.instancer and/or pyftsubs
+et. varLib.instancer and pyftsubset are part of the python package fonttools, an
+d for this script to work, you need to install them with 'pip install fonttools'
+
+Tip: For each boolean option the program supports, you can pass --no-option-nam
+e to disable it if it's enabled by default (e.g. --no-pyftsubset).
 
 Positionals:
-  args  The font files you want to transform. Tip: If the last option is an
-        array, for example: --layout-features, --flavors, or --unicodes, you
-        have to denote the end of the options with --, just before the files
-        (args). See the examples below.                                 [string]
+  args  The font files you want to transform. Tip: If the last option is an arra
+        y, for example: --layout-features, --flavors, or --unicodes, you have to
+         denote the end of the options with --, just before the files (args). Se
+        e the examples below.                                           [string]
 
 Options:
       --help              Show this help menu.                         [boolean]
       --version           Show the version number. (TODO)              [boolean]
-  -V, --verbose           Include extra info about the conversions. (TODO Not
-                          implemented well)
+  -V, --verbose           Include extra info about the conversions. (TODO Not im
+                          plemented well)
                           [default: true]                              [boolean]
-  -p, --pyftsubset        If the program should use pyftsubset. The pyftsubset
-                          flags used by the program are --layout-features,
-                          --unicodes, and --flavors (it's called --flavor in
-                          pyftsubset).
+  -p, --pyftsubset        If the program should use pyftsubset. The pyftsubset f
+                          lags used by the program are --layout-features, --unic
+                          odes, and --flavors (it's called --flavor in pyftsubse
+                          t).
                           [default: true]                              [boolean]
-  -i, --varlibinstancer   If the program should use varLib.instancer.
-                          You have to pass at least one variable axis (as a
-                          regular option) if the varlibinstancer option is true.
-                          For example, if you want to limit the variable font's
-                          weight axis from 400 to 700, you can pass --wght
-                          400:700. If you want to drop the opsz axis, you pass
-                          --opsz drop. If you want to instantiate the wdth axis
-                          to 125, pass --wdth 125. For custom axes, pass
-                          --CUSTOM 0:100 (uppercase). If the variable font
-                          supports an axis and you don't pass an option to limit
-                          it, varLib.instancer will keep that axis intact and
-                          will not limit it. If you don't use pyftsubset
-                          (--no-pyftsubset), the program will compress the font
-                          with ttLib.woff2.
+  -i, --varlibinstancer   If the program should use varLib.instancer. You have t
+                          o pass at least one variable axis (as a regular option
+                          ) if the varlibinstancer option is true. For example,
+                          if you want to limit the variable font's weight axis f
+                          rom 400 to 700, you can pass --wght 400:700. If you wa
+                          nt to drop the opsz axis, you pass --opsz drop. If you
+                           want to instantiate the wdth axis to 125, pass --wdth
+                           125. For custom axes, pass --CUSTOM 0:100 (uppercase)
+                          . If the variable font supports an axis and you don't
+                          pass an option to limit it, varLib.instancer will keep
+                           that axis intact and will not limit it. If you don't
+                          use pyftsubset (--no-pyftsubset), the program will com
+                          press the font with ttLib.woff2.
                           [default: true]                              [boolean]
   -c, --config            Use a config file (JSON format) to pass options to the
-                          program. This is preferred compared to passing
-                          arguments in the command because you can document the
-                          settings and use them again later.
+                           program. This is preferred compared to passing argume
+                          nts in the command because you can document the settin
+                          gs and use them again later.
                           [default: ""]                                 [string]
-  -a, --append-axes       If the program should append the variable fonts axes
-                          in the output filenames. For example, the filename.ttf
-                          will become filename[wght,opsz,CUSTOM].ttf. That is
-                          assuming you used the options --wght, --opsz, and
-                          --CUSTOM (the program does not analyze the font file
-                          for available axes).
+  -a, --append-axes       If the program should append the variable fonts axes i
+                          n the output filenames. For example, the filename.ttf
+                          will become filename[wght,opsz,CUSTOM].ttf. That is as
+                          suming you used the options --wght, --opsz, and --CUST
+                          OM (the program does not analyze the font file for ava
+                          ilable axes).
                           [default: false]                             [boolean]
-  -s, --suffix            A string to append to the filename if you use
-                          pyftsubset. For example, the filename.ttf with suffix
-                          'english' will become filename-english.woff2.
+  -s, --suffix            A string to append to the filename if you use pyftsubs
+                          et. For example, the filename.ttf with suffix 'english
+                          ' will become filename-english.woff2.
                           [default: ""]                                 [string]
   -o, --output-directory  The directory to store the fonts.
                           [default: ./output]                           [string]
-  -f, --flavors           The file formats that pyftsubset will create. Type
-                          'pyftsubset --help | grep -i flavor' for the available
-                          options.
+  -f, --flavors           The file formats that pyftsubset will create. Type 'py
+                          ftsubset --help | grep -i flavor' for the available op
+                          tions.
                           [default: woff2]                               [array]
   -l, --layout-features   The layout-features from pyftsubset. Type 'pyftsubset
                           --help | grep -i layout-features' or just 'pyftsubset
                           --help' for more info.
                           [default: "*"]                                 [array]
-  -u, --unicodes          The unicode characters from pyftsubset. Type
-                          'pyftsubset --help | grep -i unicodes' or just
-                          'pyftsubset --help' for more info.
+  -u, --unicodes          The unicode characters from pyftsubset. Type 'pyftsubs
+                          et --help | grep -i unicodes' or just 'pyftsubset --he
+                          lp' for more info.
                           [default: "*"]                                 [array]
 
 Examples:
-  ftnode --wght 400:700                     Limit the wght axis from 400 to 700,
-  Literata[opsz,wght].ttf                   and create a woff2 file with all the
-                                            layout features and characters.
-  ftnode --no-varlibinstancer *ttf          Run only pyftsubset on the font
-                                            files.
-  ftnode --config settings.json             Use a config file in JSON format
-  .Piazzolla*ttf                            (recommended). You can still pass
-                                            arguments to the program to override
-                                            the config. The order of importance
-                                            is: arguments > config file >
-                                            default options.
-  ftnode --no-varlibinstancer --unicodes    You need -- if the last option is an
-  AA FF DD -- *ttf                          array type. Because --unicodes is an
-                                            array and the last option before the
-                                            files, you have to denote the end of
-                                            options with --. Alternatively, you
-                                            can pass a non-array option last.
+  ftnode --wght 400:700 Literata[opsz,wght  Limit the wght axis from 400 to 700,
+  ].ttf                                      and create a woff2 file with all th
+                                            e layout features and characters.
+  ftnode --no-varlibinstancer *ttf          Run only pyftsubset on the font file
+                                            s.
+  ftnode --config settings.json .Piazzolla  Use a config file in JSON format (re
+  *ttf                                      commended). You can still pass argum
+                                            ents to the program to override the
+                                            config. The order of importance is:
+                                            arguments > config file > default op
+                                            tions.
+  ftnode --no-varlibinstancer --unicodes A  You need -- if the last option is an
+  A FF DD -- *ttf                            array type. Because --unicodes is a
+                                            n array and the last option before t
+                                            he files, you have to denote the end
+                                             of options with --. Alternatively,
+                                            you can pass a non-array option last
+                                            .
 
-Made by Markos Konstantopoulos https://markoskon.com.
+Made by Markos Konstantopoulos https://markoskon.com. For bugs and new features,
+ please open an issue at https://github.com/MarkosKon/ftnode.

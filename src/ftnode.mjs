@@ -2,8 +2,9 @@
 
 import path from "path";
 import ProgressBar from "progress";
+import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-const yargs = require("yargs/yargs");
+
 
 import { enhanceYargs, defaultOptions } from "./enhanceYargs.mjs";
 import {
@@ -254,7 +255,7 @@ yargs(hideBin(process.argv))
   .scriptName(scriptName)
   .command({
     command: `$0 [options] <args..>`,
-    description: `A script that runs a list of font files through varLib.instancer and/or pyftsubset. varLib.instancer and pyftsubset are part of the python package fonttools, and for this script to work, you need to install them with 'pip install fonttools'.
+    description: `A script that runs a list of font files through varLib.instancer and/or pyftsubset. varLib.instancer and pyftsubset are part of the python package fonttools, and for this script to work, you need to install them with 'pip install fonttools'
 Tip: For each boolean option the program supports, you can pass --no-option-name to disable it if it's enabled by default (e.g. --no-pyftsubset).`,
     builder: (yargs) => {
       return yargs
@@ -297,8 +298,7 @@ Tip: For each boolean option the program supports, you can pass --no-option-name
   })
   .option("i", {
     alias: "varlibinstancer",
-    description: `If the program should use varLib.instancer.
-You have to pass at least one variable axis (as a regular option) if the varlibinstancer option is true. For example, if you want to limit the variable font's weight axis from 400 to 700, you can pass --wght 400:700. If you want to drop the opsz axis, you pass --opsz drop. If you want to instantiate the wdth axis to 125, pass --wdth 125. For custom axes, pass --CUSTOM 0:100 (uppercase). If the variable font supports an axis and you don't pass an option to limit it, varLib.instancer will keep that axis intact and will not limit it. If you don't use pyftsubset (--no-pyftsubset), the program will compress the font with ttLib.woff2. 
+    description: `If the program should use varLib.instancer. You have to pass at least one variable axis (as a regular option) if the varlibinstancer option is true. For example, if you want to limit the variable font's weight axis from 400 to 700, you can pass --wght 400:700. If you want to drop the opsz axis, you pass --opsz drop. If you want to instantiate the wdth axis to 125, pass --wdth 125. For custom axes, pass --CUSTOM 0:100 (uppercase). If the variable font supports an axis and you don't pass an option to limit it, varLib.instancer will keep that axis intact and will not limit it. If you don't use pyftsubset (--no-pyftsubset), the program will compress the font with ttLib.woff2. 
 [default: ${defaultOptions.varLibInstancer}]`,
     type: "boolean",
   })
