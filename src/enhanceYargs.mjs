@@ -46,9 +46,9 @@ const enhanceYargs = ({
   try {
     if (files.length === 0)
       throw new ApplicationError(
-        `Please provide a file argument. 
+        `Please provide a file argument.
 Maybe you have to use --, that marks the end of options, before the files?
-For example: ftnode.mjs --unicodes AA FF -- ./file1.ttf ./file2.ttf\n`
+For example: ftnode --unicodes AA FF -- ./file1.ttf ./file2.ttf\n`
       );
   } catch (error) {
     if (error instanceof ApplicationError) printApplicationError(error);

@@ -286,7 +286,7 @@ Tip: For each boolean option the program supports, you can pass --no-option-name
   })
   .option("V", {
     alias: "verbose",
-    description: `Include extra info about the conversions. (TODO Not implemented well) 
+    description: `Include extra info about the conversions. (TODO Not implemented well)
 [default: ${defaultOptions.verbose}]`,
     type: "boolean",
   })
@@ -298,7 +298,7 @@ Tip: For each boolean option the program supports, you can pass --no-option-name
   })
   .option("i", {
     alias: "varlibinstancer",
-    description: `If the program should use varLib.instancer. You have to pass at least one variable axis (as a regular option) if the varlibinstancer option is true. For example, if you want to limit the variable font's weight axis from 400 to 700, you can pass --wght 400:700. If you want to drop the opsz axis, you pass --opsz drop. If you want to instantiate the wdth axis to 125, pass --wdth 125. For custom axes, pass --CUSTOM 0:100 (uppercase). If the variable font supports an axis and you don't pass an option to limit it, varLib.instancer will keep that axis intact and will not limit it. If you don't use pyftsubset (--no-pyftsubset), the program will compress the font with ttLib.woff2. 
+    description: `If the program should use varLib.instancer. You have to pass at least one variable axis (as a regular option) if the varlibinstancer option is true. For example, if you want to limit the variable font's weight axis from 400 to 700, you can pass --wght 400:700. If you want to drop the opsz axis, you pass --opsz drop. If you want to instantiate the wdth axis to 125, pass --wdth 125. For custom axes, pass --CUSTOM 0:100 (uppercase). If the variable font supports an axis and you don't pass an option to limit it, varLib.instancer will keep that axis intact and will not limit it. If you don't use pyftsubset (--no-pyftsubset), the program will compress the font with ttLib.woff2.
 [default: ${defaultOptions.varLibInstancer}]`,
     type: "boolean",
   })
@@ -328,7 +328,7 @@ Tip: For each boolean option the program supports, you can pass --no-option-name
   })
   .option("f", {
     alias: "flavors",
-    description: `The file formats that pyftsubset will create. Type 'pyftsubset --help | grep -i flavor' for the available options. 
+    description: `The file formats that pyftsubset will create. Type 'pyftsubset --help | grep -i flavor' for the available options.
 [default: ${defaultOptions.flavors}]`,
     type: "array",
   })
