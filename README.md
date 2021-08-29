@@ -4,7 +4,7 @@ A script that runs a list of font files through `varLib.instancer` and/or `pyfts
 
 ## Install
 
-`npm i -g ftnode`
+`npm i -g @markoskon/ftnode`
 
 ### Dependencies
 
