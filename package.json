@@ -1,13 +1,17 @@
 {
   "name": "@markoskon/ftnode",
   "description": "A script that runs a list of font files through varLib.instancer and/or pyftsubset.",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "license": "MIT",
   "type": "module",
   "repository": "MarkosKon/ftnode",
   "engines": {
     "node": ">=16.0.0"
   },
+  "files": [
+    "src/**/*.mjs",
+    "**/*.json"
+  ],
   "keywords": [
     "typography",
     "fonts",
