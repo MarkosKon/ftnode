@@ -5,6 +5,9 @@
   "license": "MIT",
   "type": "module",
   "repository": "MarkosKon/ftnode",
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "keywords": [
     "typography",
     "fonts",
@@ -28,7 +31,7 @@
     "lodash.merge": "^4.6.2",
     "progress": "^2.0.3",
     "yargs": "^17.0.1",
-    "zx": "^4.0.0"
+    "zx": "^5.0.0"
   },
   "devDependencies": {
     "@types/lodash.merge": "^4.6.6",
